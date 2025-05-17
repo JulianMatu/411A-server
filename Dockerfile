@@ -33,8 +33,12 @@ RUN npm ci --only=production && npm cache clean --force
 COPY --from=builder /usr/src/app/dist ./dist
 
 # Create a non-root user and switch to it
+# Also create the directory for Cloud SQL Unix socket
 RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nodeuser -u 1001 -G nodejs
+    adduser -S nodeuser -u 1001 -G nodejs && \
+    mkdir -p /cloudsql && \
+    chmod 777 /cloudsql
+
 USER nodeuser
 
 # Expose the port the app runs on

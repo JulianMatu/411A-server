@@ -8,7 +8,8 @@
     "dev": "nodemon --exec ts-node src/index.ts",
     "build": "tsc",
     "db:init": "ts-node src/models/db-init.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:cloud-sql": "ts-node test-cloud-sql-connection.ts"
   },
   "repository": {
     "type": "git",
