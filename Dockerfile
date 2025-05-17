@@ -32,12 +32,18 @@ RUN npm ci --only=production && npm cache clean --force
 # Copy built files from builder stage
 COPY --from=builder /usr/src/app/dist ./dist
 
+# Install additional tools that might be needed for troubleshooting
+RUN apk add --no-cache curl
+
+# Create the Cloud SQL directory and set permissions - this must be root
+RUN mkdir -p /cloudsql && chmod 777 /cloudsql
+
 # Create a non-root user and switch to it
-# Also create the directory for Cloud SQL Unix socket
 RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nodeuser -u 1001 -G nodejs && \
-    mkdir -p /cloudsql && \
-    chmod 777 /cloudsql
+    adduser -S nodeuser -u 1001 -G nodejs
+
+# Set proper permissions on cloudsql directory
+RUN chown -R nodeuser:nodejs /cloudsql
 
 USER nodeuser
 
